@@ -1,118 +1,118 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Languages, Copy, Check, Download } from 'lucide-react';
-import LanguageDropdown from './LanguageDropdown';
+import React, { useState, useRef, useEffect } from "react";
+import { Mic, MicOff, Languages, Copy, Check, Download } from "lucide-react";
+import LanguageDropdown from "./LanguageDropdown";
 
 // ภาษาที่รองรับ
 const languageOptions = [
-  { code: 'af', name: 'Afrikaans' },
-  { code: 'sq', name: 'Albanian' },
-  { code: 'am', name: 'Amharic' },
-  { code: 'ar', name: 'Arabic' },
-  { code: 'hy', name: 'Armenian' },
-  { code: 'az', name: 'Azerbaijani' },
-  { code: 'eu', name: 'Basque' },
-  { code: 'be', name: 'Belarusian' },
-  { code: 'bn', name: 'Bengali' },
-  { code: 'bs', name: 'Bosnian' },
-  { code: 'bg', name: 'Bulgarian' },
-  { code: 'ca', name: 'Catalan' },
-  { code: 'ceb', name: 'Cebuano' },
-  { code: 'ny', name: 'Chichewa' },
-  { code: 'zh-CN', name: 'Chinese (Simplified)' },
-  { code: 'zh-TW', name: 'Chinese (Traditional)' },
-  { code: 'co', name: 'Corsican' },
-  { code: 'hr', name: 'Croatian' },
-  { code: 'cs', name: 'Czech' },
-  { code: 'da', name: 'Danish' },
-  { code: 'nl', name: 'Dutch' },
-  { code: 'en', name: 'English' },
-  { code: 'eo', name: 'Esperanto' },
-  { code: 'et', name: 'Estonian' },
-  { code: 'tl', name: 'Filipino' },
-  { code: 'fi', name: 'Finnish' },
-  { code: 'fr', name: 'French' },
-  { code: 'fy', name: 'Frisian' },
-  { code: 'gl', name: 'Galician' },
-  { code: 'ka', name: 'Georgian' },
-  { code: 'de', name: 'German' },
-  { code: 'el', name: 'Greek' },
-  { code: 'gu', name: 'Gujarati' },
-  { code: 'ht', name: 'Haitian Creole' },
-  { code: 'ha', name: 'Hausa' },
-  { code: 'haw', name: 'Hawaiian' },
-  { code: 'iw', name: 'Hebrew' },
-  { code: 'hi', name: 'Hindi' },
-  { code: 'hmn', name: 'Hmong' },
-  { code: 'hu', name: 'Hungarian' },
-  { code: 'is', name: 'Icelandic' },
-  { code: 'ig', name: 'Igbo' },
-  { code: 'id', name: 'Indonesian' },
-  { code: 'ga', name: 'Irish' },
-  { code: 'it', name: 'Italian' },
-  { code: 'ja', name: 'Japanese' },
-  { code: 'jw', name: 'Javanese' },
-  { code: 'kn', name: 'Kannada' },
-  { code: 'kk', name: 'Kazakh' },
-  { code: 'km', name: 'Khmer' },
-  { code: 'rw', name: 'Kinyarwanda' },
-  { code: 'ko', name: 'Korean' },
-  { code: 'ku', name: 'Kurdish (Kurmanji)' },
-  { code: 'ky', name: 'Kyrgyz' },
-  { code: 'lo', name: 'Lao' },
-  { code: 'la', name: 'Latin' },
-  { code: 'lv', name: 'Latvian' },
-  { code: 'lt', name: 'Lithuanian' },
-  { code: 'lb', name: 'Luxembourgish' },
-  { code: 'mk', name: 'Macedonian' },
-  { code: 'mg', name: 'Malagasy' },
-  { code: 'ms', name: 'Malay' },
-  { code: 'ml', name: 'Malayalam' },
-  { code: 'mt', name: 'Maltese' },
-  { code: 'mi', name: 'Maori' },
-  { code: 'mr', name: 'Marathi' },
-  { code: 'mn', name: 'Mongolian' },
-  { code: 'my', name: 'Myanmar (Burmese)' },
-  { code: 'ne', name: 'Nepali' },
-  { code: 'no', name: 'Norwegian' },
-  { code: 'or', name: 'Odia (Oriya)' },
-  { code: 'ps', name: 'Pashto' },
-  { code: 'fa', name: 'Persian' },
-  { code: 'pl', name: 'Polish' },
-  { code: 'pt', name: 'Portuguese' },
-  { code: 'pa', name: 'Punjabi' },
-  { code: 'ro', name: 'Romanian' },
-  { code: 'ru', name: 'Russian' },
-  { code: 'sm', name: 'Samoan' },
-  { code: 'gd', name: 'Scots Gaelic' },
-  { code: 'sr', name: 'Serbian' },
-  { code: 'st', name: 'Sesotho' },
-  { code: 'sn', name: 'Shona' },
-  { code: 'sd', name: 'Sindhi' },
-  { code: 'si', name: 'Sinhala' },
-  { code: 'sk', name: 'Slovak' },
-  { code: 'sl', name: 'Slovenian' },
-  { code: 'so', name: 'Somali' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'su', name: 'Sundanese' },
-  { code: 'sw', name: 'Swahili' },
-  { code: 'sv', name: 'Swedish' },
-  { code: 'tg', name: 'Tajik' },
-  { code: 'ta', name: 'Tamil' },
-  { code: 'tt', name: 'Tatar' },
-  { code: 'te', name: 'Telugu' },
-  { code: 'th', name: 'Thai' },
-  { code: 'tr', name: 'Turkish' },
-  { code: 'tk', name: 'Turkmen' },
-  { code: 'uk', name: 'Ukrainian' },
-  { code: 'ur', name: 'Urdu' },
-  { code: 'ug', name: 'Uyghur' },
-  { code: 'uz', name: 'Uzbek' },
-  { code: 'vi', name: 'Vietnamese' },
-  { code: 'cy', name: 'Welsh' },
-  { code: 'xh', name: 'Xhosa' },
-  { code: 'yi', name: 'Yiddish' },
-  { code: 'yo', name: 'Yoruba' },
-  { code: 'zu', name: 'Zulu' },
+  { code: "af", name: "Afrikaans" },
+  { code: "sq", name: "Albanian" },
+  { code: "am", name: "Amharic" },
+  { code: "ar", name: "Arabic" },
+  { code: "hy", name: "Armenian" },
+  { code: "az", name: "Azerbaijani" },
+  { code: "eu", name: "Basque" },
+  { code: "be", name: "Belarusian" },
+  { code: "bn", name: "Bengali" },
+  { code: "bs", name: "Bosnian" },
+  { code: "bg", name: "Bulgarian" },
+  { code: "ca", name: "Catalan" },
+  { code: "ceb", name: "Cebuano" },
+  { code: "ny", name: "Chichewa" },
+  { code: "zh-CN", name: "Chinese (Simplified)" },
+  { code: "zh-TW", name: "Chinese (Traditional)" },
+  { code: "co", name: "Corsican" },
+  { code: "hr", name: "Croatian" },
+  { code: "cs", name: "Czech" },
+  { code: "da", name: "Danish" },
+  { code: "nl", name: "Dutch" },
+  { code: "en", name: "English" },
+  { code: "eo", name: "Esperanto" },
+  { code: "et", name: "Estonian" },
+  { code: "tl", name: "Filipino" },
+  { code: "fi", name: "Finnish" },
+  { code: "fr", name: "French" },
+  { code: "fy", name: "Frisian" },
+  { code: "gl", name: "Galician" },
+  { code: "ka", name: "Georgian" },
+  { code: "de", name: "German" },
+  { code: "el", name: "Greek" },
+  { code: "gu", name: "Gujarati" },
+  { code: "ht", name: "Haitian Creole" },
+  { code: "ha", name: "Hausa" },
+  { code: "haw", name: "Hawaiian" },
+  { code: "iw", name: "Hebrew" },
+  { code: "hi", name: "Hindi" },
+  { code: "hmn", name: "Hmong" },
+  { code: "hu", name: "Hungarian" },
+  { code: "is", name: "Icelandic" },
+  { code: "ig", name: "Igbo" },
+  { code: "id", name: "Indonesian" },
+  { code: "ga", name: "Irish" },
+  { code: "it", name: "Italian" },
+  { code: "ja", name: "Japanese" },
+  { code: "jw", name: "Javanese" },
+  { code: "kn", name: "Kannada" },
+  { code: "kk", name: "Kazakh" },
+  { code: "km", name: "Khmer" },
+  { code: "rw", name: "Kinyarwanda" },
+  { code: "ko", name: "Korean" },
+  { code: "ku", name: "Kurdish (Kurmanji)" },
+  { code: "ky", name: "Kyrgyz" },
+  { code: "lo", name: "Lao" },
+  { code: "la", name: "Latin" },
+  { code: "lv", name: "Latvian" },
+  { code: "lt", name: "Lithuanian" },
+  { code: "lb", name: "Luxembourgish" },
+  { code: "mk", name: "Macedonian" },
+  { code: "mg", name: "Malagasy" },
+  { code: "ms", name: "Malay" },
+  { code: "ml", name: "Malayalam" },
+  { code: "mt", name: "Maltese" },
+  { code: "mi", name: "Maori" },
+  { code: "mr", name: "Marathi" },
+  { code: "mn", name: "Mongolian" },
+  { code: "my", name: "Myanmar (Burmese)" },
+  { code: "ne", name: "Nepali" },
+  { code: "no", name: "Norwegian" },
+  { code: "or", name: "Odia (Oriya)" },
+  { code: "ps", name: "Pashto" },
+  { code: "fa", name: "Persian" },
+  { code: "pl", name: "Polish" },
+  { code: "pt", name: "Portuguese" },
+  { code: "pa", name: "Punjabi" },
+  { code: "ro", name: "Romanian" },
+  { code: "ru", name: "Russian" },
+  { code: "sm", name: "Samoan" },
+  { code: "gd", name: "Scots Gaelic" },
+  { code: "sr", name: "Serbian" },
+  { code: "st", name: "Sesotho" },
+  { code: "sn", name: "Shona" },
+  { code: "sd", name: "Sindhi" },
+  { code: "si", name: "Sinhala" },
+  { code: "sk", name: "Slovak" },
+  { code: "sl", name: "Slovenian" },
+  { code: "so", name: "Somali" },
+  { code: "es", name: "Spanish" },
+  { code: "su", name: "Sundanese" },
+  { code: "sw", name: "Swahili" },
+  { code: "sv", name: "Swedish" },
+  { code: "tg", name: "Tajik" },
+  { code: "ta", name: "Tamil" },
+  { code: "tt", name: "Tatar" },
+  { code: "te", name: "Telugu" },
+  { code: "th", name: "Thai" },
+  { code: "tr", name: "Turkish" },
+  { code: "tk", name: "Turkmen" },
+  { code: "uk", name: "Ukrainian" },
+  { code: "ur", name: "Urdu" },
+  { code: "ug", name: "Uyghur" },
+  { code: "uz", name: "Uzbek" },
+  { code: "vi", name: "Vietnamese" },
+  { code: "cy", name: "Welsh" },
+  { code: "xh", name: "Xhosa" },
+  { code: "yi", name: "Yiddish" },
+  { code: "yo", name: "Yoruba" },
+  { code: "zu", name: "Zulu" },
 ];
 
 async function translateText(
@@ -123,9 +123,9 @@ async function translateText(
   const FUNCTION_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
   const res = await fetch(`${FUNCTION_BASE_URL}/translate`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({
@@ -150,8 +150,8 @@ async function translateText(
 }
 
 const RealTimeTranslate: React.FC = () => {
-  const [sourceLanguage, setSourceLanguage] = useState('en');
-  const [targetLanguage, setTargetLanguage] = useState('th');
+  const [sourceLanguage, setSourceLanguage] = useState("en");
+  const [targetLanguage, setTargetLanguage] = useState("th");
   const [recording, setRecording] = useState(false);
   const [paused, setPaused] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -164,7 +164,7 @@ const RealTimeTranslate: React.FC = () => {
     { text: string; timestamp: number; isFinal: boolean }[]
   >([]);
 
-  const [interimTranscript, setInterimTranscript] = useState('');
+  const [interimTranscript, setInterimTranscript] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const [translatedSegments, setTranslatedSegments] = useState<
@@ -227,8 +227,8 @@ const RealTimeTranslate: React.FC = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -236,8 +236,8 @@ const RealTimeTranslate: React.FC = () => {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      setError('Speech Recognition API is not supported in this browser.');
-      console.error('Speech Recognition API not supported in this browser');
+      setError("Speech Recognition API is not supported in this browser.");
+      console.error("Speech Recognition API not supported in this browser");
       return;
     }
 
@@ -247,11 +247,11 @@ const RealTimeTranslate: React.FC = () => {
     recognition.current.lang = sourceLanguage;
 
     recognition.current.onstart = () => {
-      console.log('Speech recognition started');
+      console.log("Speech recognition started");
     };
 
     recognition.current.onresult = (event) => {
-      let interim = '';
+      let interim = "";
       const newFinalSegments: {
         text: string;
         timestamp: number;
@@ -269,7 +269,7 @@ const RealTimeTranslate: React.FC = () => {
             isFinal: true,
           });
         } else {
-          interim += text + ' ';
+          interim += text + " ";
         }
       }
 
@@ -280,8 +280,8 @@ const RealTimeTranslate: React.FC = () => {
     };
 
     recognition.current.onerror = (event) => {
-      console.error('Recognition error event:', event.error);
-      if (event.error !== 'aborted') {
+      console.error("Recognition error event:", event.error);
+      if (event.error !== "aborted") {
         setError(`Recognition error: ${event.error}`);
       } else {
         setError(null);
@@ -293,22 +293,22 @@ const RealTimeTranslate: React.FC = () => {
         `Recognition ended. recording=${recordingRef.current}, paused=${pausedRef.current}`
       );
       if (pausedRef.current) {
-        console.log('Recognition paused, will NOT restart');
+        console.log("Recognition paused, will NOT restart");
         return;
       }
       if (!recordingRef.current) {
-        console.log('Recognition stopped, will NOT restart');
+        console.log("Recognition stopped, will NOT restart");
         return;
       }
       console.log(
-        'Recognition ended but restarting because recording is still true'
+        "Recognition ended but restarting because recording is still true"
       );
       try {
         recognition.current?.start();
       } catch (err) {
-        console.error('Failed to restart recognition:', err);
+        console.error("Failed to restart recognition:", err);
         setError(
-          err instanceof Error ? err.message : 'Recognition failed to restart'
+          err instanceof Error ? err.message : "Recognition failed to restart"
         );
         setRecording(false);
         setPaused(false);
@@ -340,16 +340,16 @@ const RealTimeTranslate: React.FC = () => {
             setError(null);
           })
           .catch((e) => {
-            console.error('Translation error:', e);
+            console.error("Translation error:", e);
             setTranslatedSegments((prev) => {
               const newTranslations = [...prev];
               newTranslations[i] = {
-                text: '[Translation error]',
+                text: "[Translation error]",
                 timestamp: seg.timestamp,
               };
               return newTranslations;
             });
-            setError(e instanceof Error ? e.message : 'Translation failed');
+            setError(e instanceof Error ? e.message : "Translation failed");
           });
       }
     });
@@ -372,7 +372,7 @@ const RealTimeTranslate: React.FC = () => {
   const startRecording = () => {
     setError(null);
     setTranscriptSegments([]);
-    setInterimTranscript('');
+    setInterimTranscript("");
     setTranslatedSegments([]);
     setPaused(false);
     setRecording(true);
@@ -381,9 +381,9 @@ const RealTimeTranslate: React.FC = () => {
     try {
       recognition.current?.start();
     } catch (err) {
-      console.error('Failed to start recording:', err);
+      console.error("Failed to start recording:", err);
       setError(
-        err instanceof Error ? err.message : 'Failed to start recording'
+        err instanceof Error ? err.message : "Failed to start recording"
       );
       setRecording(false);
     }
@@ -397,7 +397,7 @@ const RealTimeTranslate: React.FC = () => {
 
   const pauseRecording = () => {
     if (recording) {
-      console.log('Pausing recognition...');
+      console.log("Pausing recognition...");
       recognition.current?.stop();
       setPaused(true);
       setRecording(false);
@@ -411,9 +411,9 @@ const RealTimeTranslate: React.FC = () => {
         setPaused(false);
         setRecording(true);
       } catch (err) {
-        console.error('Failed to continue recording:', err);
+        console.error("Failed to continue recording:", err);
         setError(
-          err instanceof Error ? err.message : 'Failed to continue recording'
+          err instanceof Error ? err.message : "Failed to continue recording"
         );
       }
     }
@@ -432,17 +432,17 @@ const RealTimeTranslate: React.FC = () => {
 
   const downloadFile = (
     segments: { text: string; timestamp: number }[],
-    fileType: 'csv' | 'txt'
+    fileType: "csv" | "txt"
   ) => {
     if (!segments.length) return;
 
-    let fileContent = '';
-    let mimeType = 'text/plain';
-    let extension = '.txt';
+    let fileContent = "";
+    let mimeType = "text/plain";
+    let extension = ".txt";
 
-    if (fileType === 'csv') {
+    if (fileType === "csv") {
       fileContent =
-        'Timestamp,Text\n' +
+        "Timestamp,Text\n" +
         segments
           .map(
             (seg) =>
@@ -450,23 +450,23 @@ const RealTimeTranslate: React.FC = () => {
                 seg.timestamp
               ).toLocaleTimeString()}","${seg.text.replace(/"/g, '""')}"`
           )
-          .join('\n');
-      mimeType = 'text/csv';
-      extension = '.csv';
+          .join("\n");
+      mimeType = "text/csv";
+      extension = ".csv";
     } else {
       fileContent = segments
         .map(
           (seg) =>
             `[${new Date(
               seg.timestamp
-            ).toLocaleTimeString()}] ${seg.text.replace(/[\r\n]+/g, ' ')}`
+            ).toLocaleTimeString()}] ${seg.text.replace(/[\r\n]+/g, " ")}`
         )
-        .join('\n');
+        .join("\n");
     }
 
     const blob = new Blob([fileContent], { type: mimeType });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `transcript${extension}`;
     document.body.appendChild(a);
@@ -482,9 +482,9 @@ const RealTimeTranslate: React.FC = () => {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins
+    return `${hours.toString().padStart(2, "0")}:${mins
       .toString()
-      .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -492,7 +492,7 @@ const RealTimeTranslate: React.FC = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
           <Languages className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-          Real-time Translation with Timestamped Log
+          Real-time Translation
         </h2>
       </div>
 
@@ -586,8 +586,8 @@ const RealTimeTranslate: React.FC = () => {
             <div
               className={`w-2 h-2 rounded-full ${
                 recording && !paused
-                  ? 'bg-red-500 animate-pulse'
-                  : 'bg-yellow-500'
+                  ? "bg-red-500 animate-pulse"
+                  : "bg-yellow-500"
               }`}
             />
             <span className="font-mono text-sm font-medium dark:text-white">
@@ -614,8 +614,8 @@ const RealTimeTranslate: React.FC = () => {
                 disabled={transcriptSegments.length === 0}
                 className={`flex items-center gap-1 px-3 py-1 text-sm font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition ${
                   transcriptSegments.length === 0
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ''
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
                 title="Download"
                 aria-label="Download"
@@ -626,7 +626,7 @@ const RealTimeTranslate: React.FC = () => {
                 <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => {
-                      downloadFile(transcriptSegments, 'txt');
+                      downloadFile(transcriptSegments, "txt");
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
@@ -634,7 +634,7 @@ const RealTimeTranslate: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      downloadFile(translatedSegments, 'csv');
+                      downloadFile(translatedSegments, "csv");
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
@@ -646,15 +646,15 @@ const RealTimeTranslate: React.FC = () => {
             <button
               onClick={() =>
                 copyToClipboard(
-                  transcriptSegments.map((seg) => seg.text).join(' '),
+                  transcriptSegments.map((seg) => seg.text).join(" "),
                   setCopiedSpeech
                 )
               }
               disabled={transcriptSegments.length === 0}
               className={`flex items-center gap-1 px-3 py-1 text-sm font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition ${
                 transcriptSegments.length === 0
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               }`}
               title="Copy Speech Text"
               aria-label="Copy Speech Text"
@@ -712,8 +712,8 @@ const RealTimeTranslate: React.FC = () => {
                 disabled={translatedSegments.length === 0}
                 className={`flex items-center gap-1 px-3 py-1 text-sm font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition ${
                   translatedSegments.length === 0
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ''
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
                 title="Download"
                 aria-label="Download"
@@ -723,14 +723,14 @@ const RealTimeTranslate: React.FC = () => {
               {showTranslationDownloadMenu && (
                 <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-700">
                   <button
-                    onClick={() => downloadFile(translatedSegments, 'txt')}
+                    onClick={() => downloadFile(translatedSegments, "txt")}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Download .txt
                   </button>
 
                   <button
-                    onClick={() => downloadFile(translatedSegments, 'csv')}
+                    onClick={() => downloadFile(translatedSegments, "csv")}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Download .csv
@@ -741,15 +741,15 @@ const RealTimeTranslate: React.FC = () => {
             <button
               onClick={() =>
                 copyToClipboard(
-                  translatedSegments.map((seg) => seg.text).join(' '),
+                  translatedSegments.map((seg) => seg.text).join(" "),
                   setCopiedTranslation
                 )
               }
               disabled={translatedSegments.length === 0}
               className={`flex items-center gap-1 px-3 py-1 text-sm font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition ${
                 translatedSegments.length === 0
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               }`}
               title="Copy Translation"
               aria-label="Copy Translation"

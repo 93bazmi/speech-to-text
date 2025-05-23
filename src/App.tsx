@@ -1,11 +1,12 @@
-import React from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import RealTimeTranslate from './components/RealTimeTranslate';
-import { AlertCircle } from 'lucide-react';
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import RealTimeTranslate from "./components/RealTimeTranslate";
+import { AlertCircle } from "lucide-react";
 
 function App() {
-  const hasRecognitionSupport = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+  const hasRecognitionSupport =
+    "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 font-sans">
@@ -28,8 +29,6 @@ function App() {
           )}
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
