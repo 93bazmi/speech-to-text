@@ -669,7 +669,7 @@ const RealTimeTranslate: React.FC = () => {
         </div>
         <div
           ref={speechContainerRef}
-          className="bg-gray-50 dark:bg-gray-900 rounded-md p-4 max-h-56 overflow-y-auto font-mono text-gray-900 dark:text-gray-100 shadow-sm -mt-1"
+          className="bg-gray-50 dark:bg-gray-900 rounded-md p-4 h-56 overflow-y-auto font-mono text-gray-900 dark:text-gray-100 shadow-sm -mt-1"
           aria-live="polite"
         >
           {transcriptSegments.length === 0 && !interimTranscript && (
@@ -764,7 +764,7 @@ const RealTimeTranslate: React.FC = () => {
         </div>
         <div
           ref={translationContainerRef}
-          className="bg-gray-50 dark:bg-gray-900 rounded-md p-4 max-h-56 overflow-y-auto font-mono text-gray-900 dark:text-gray-100 shadow-sm whitespace-pre-wrap -mt-1"
+          className="bg-gray-50 dark:bg-gray-900 rounded-md p-4 h-56 overflow-y-auto font-mono text-gray-900 dark:text-gray-100 shadow-sm whitespace-pre-wrap -mt-1"
           aria-live="polite"
         >
           {translatedSegments.length > 0 ? (
