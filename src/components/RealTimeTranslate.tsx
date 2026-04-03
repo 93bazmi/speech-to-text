@@ -236,20 +236,21 @@ const RealTimeTranslate: React.FC = () => {
 
     if (!SpeechRecognition) {
       setError("Speech Recognition API is not supported in this browser.");
-      console.error("Speech Recognition API not supported in this browser");
       return;
     }
 
-    recognition.current = new SpeechRecognition();
-    recognition.current.continuous = true;
-    recognition.current.interimResults = true;
-    recognition.current.lang = sourceLanguage;
+    // ✅ CREATE FIRST
+    const instance = new SpeechRecognition();
 
-    recognition.current.onstart = () => {
+    instance.continuous = true;
+    instance.interimResults = true;
+    instance.lang = sourceLanguage;
+
+    instance.onstart = () => {
       console.log("Speech recognition started");
     };
 
-    recognition.current.onresult = (event) => {
+    instance.onresult = (event: SpeechRecognitionEvent) => {
       let interim = "";
       const newFinalSegments: {
         text: string;
@@ -275,47 +276,21 @@ const RealTimeTranslate: React.FC = () => {
       if (newFinalSegments.length > 0) {
         setTranscriptSegments((prev) => [...prev, ...newFinalSegments]);
       }
+
       setInterimTranscript(interim.trim());
     };
 
-    recognition.current.onerror = (event) => {
-      console.error("Recognition error event:", event.error);
+    instance.onerror = (event: SpeechRecognitionErrorEvent) => {
       if (event.error !== "aborted") {
         setError(`Recognition error: ${event.error}`);
-      } else {
-        setError(null);
       }
     };
 
-    recognition.current.onend = () => {
-      console.log(
-        `Recognition ended. recording=${recordingRef.current}, paused=${pausedRef.current}`,
-      );
-      if (pausedRef.current) {
-        console.log("Recognition paused, will NOT restart");
-        return;
-      }
-      if (!recordingRef.current) {
-        console.log("Recognition stopped, will NOT restart");
-        return;
-      }
-      console.log(
-        "Recognition ended but restarting because recording is still true",
-      );
-      try {
-        recognition.current?.start();
-      } catch (err) {
-        console.error("Failed to restart recognition:", err);
-        setError(
-          err instanceof Error ? err.message : "Recognition failed to restart",
-        );
-        setRecording(false);
-        setPaused(false);
-      }
-    };
+    // ✅ assign AFTER setup
+    recognition.current = instance;
 
     return () => {
-      recognition.current?.stop();
+      instance.stop();
     };
   }, [sourceLanguage]);
 
@@ -494,6 +469,10 @@ const RealTimeTranslate: React.FC = () => {
           Real-time Translation
         </h2>
       </div>
+
+      {error && (
+        <div className="bg-red-100 text-red-700 px-3 py-2 rounded">{error}</div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <LanguageDropdown
