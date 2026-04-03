@@ -118,15 +118,14 @@ const languageOptions = [
 async function translateText(
   text: string,
   sourceLanguage: string,
-  targetLanguage: string
+  targetLanguage: string,
 ) {
-  const FUNCTION_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
+  const API_BASE_URL = "/api";
 
-  const res = await fetch(`${FUNCTION_BASE_URL}/translate`, {
+  const res = await fetch(`${API_BASE_URL}/translate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({
       text,
@@ -290,7 +289,7 @@ const RealTimeTranslate: React.FC = () => {
 
     recognition.current.onend = () => {
       console.log(
-        `Recognition ended. recording=${recordingRef.current}, paused=${pausedRef.current}`
+        `Recognition ended. recording=${recordingRef.current}, paused=${pausedRef.current}`,
       );
       if (pausedRef.current) {
         console.log("Recognition paused, will NOT restart");
@@ -301,14 +300,14 @@ const RealTimeTranslate: React.FC = () => {
         return;
       }
       console.log(
-        "Recognition ended but restarting because recording is still true"
+        "Recognition ended but restarting because recording is still true",
       );
       try {
         recognition.current?.start();
       } catch (err) {
         console.error("Failed to restart recognition:", err);
         setError(
-          err instanceof Error ? err.message : "Recognition failed to restart"
+          err instanceof Error ? err.message : "Recognition failed to restart",
         );
         setRecording(false);
         setPaused(false);
@@ -383,7 +382,7 @@ const RealTimeTranslate: React.FC = () => {
     } catch (err) {
       console.error("Failed to start recording:", err);
       setError(
-        err instanceof Error ? err.message : "Failed to start recording"
+        err instanceof Error ? err.message : "Failed to start recording",
       );
       setRecording(false);
     }
@@ -413,7 +412,7 @@ const RealTimeTranslate: React.FC = () => {
       } catch (err) {
         console.error("Failed to continue recording:", err);
         setError(
-          err instanceof Error ? err.message : "Failed to continue recording"
+          err instanceof Error ? err.message : "Failed to continue recording",
         );
       }
     }
@@ -421,7 +420,7 @@ const RealTimeTranslate: React.FC = () => {
 
   const copyToClipboard = (
     text: string,
-    setCopied: React.Dispatch<React.SetStateAction<boolean>>
+    setCopied: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
@@ -432,7 +431,7 @@ const RealTimeTranslate: React.FC = () => {
 
   const downloadFile = (
     segments: { text: string; timestamp: number }[],
-    fileType: "csv" | "txt"
+    fileType: "csv" | "txt",
   ) => {
     if (!segments.length) return;
 
@@ -447,8 +446,8 @@ const RealTimeTranslate: React.FC = () => {
           .map(
             (seg) =>
               `"${new Date(
-                seg.timestamp
-              ).toLocaleTimeString()}","${seg.text.replace(/"/g, '""')}"`
+                seg.timestamp,
+              ).toLocaleTimeString()}","${seg.text.replace(/"/g, '""')}"`,
           )
           .join("\n");
       mimeType = "text/csv";
@@ -458,8 +457,8 @@ const RealTimeTranslate: React.FC = () => {
         .map(
           (seg) =>
             `[${new Date(
-              seg.timestamp
-            ).toLocaleTimeString()}] ${seg.text.replace(/[\r\n]+/g, " ")}`
+              seg.timestamp,
+            ).toLocaleTimeString()}] ${seg.text.replace(/[\r\n]+/g, " ")}`,
         )
         .join("\n");
     }
@@ -647,7 +646,7 @@ const RealTimeTranslate: React.FC = () => {
               onClick={() =>
                 copyToClipboard(
                   transcriptSegments.map((seg) => seg.text).join(" "),
-                  setCopiedSpeech
+                  setCopiedSpeech,
                 )
               }
               disabled={transcriptSegments.length === 0}
@@ -742,7 +741,7 @@ const RealTimeTranslate: React.FC = () => {
               onClick={() =>
                 copyToClipboard(
                   translatedSegments.map((seg) => seg.text).join(" "),
-                  setCopiedTranslation
+                  setCopiedTranslation,
                 )
               }
               disabled={translatedSegments.length === 0}

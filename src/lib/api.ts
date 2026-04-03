@@ -1,11 +1,10 @@
-const FUNCTION_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
+const API_BASE_URL = '/api';
 
 export async function testGoogleApi() {
-  console.log('[testGoogleApi] Calling:', `${FUNCTION_BASE_URL}/test`);
-  const res = await fetch(`${FUNCTION_BASE_URL}/test`, {
+  console.log('[testGoogleApi] Calling:', `${API_BASE_URL}/test`);
+  const res = await fetch(`${API_BASE_URL}/test`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`, // เพิ่ม Authorization header
     },
   });
 
@@ -31,12 +30,10 @@ export async function translateText(
   sourceLanguage: string,
   targetLanguage: string
 ) {
-  const FUNCTION_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
-  const res = await fetch(`${FUNCTION_BASE_URL}/translate`, {
+  const res = await fetch(`${API_BASE_URL}/translate-v3`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({ text, sourceLanguage, targetLanguage }),
   });
