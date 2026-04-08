@@ -33,7 +33,7 @@ APIs & Tools
 
 Deployment
 * Frontend: Vercel
-*Backend: Render
+* Backend: Render
 
 ## 🚀 Installation
 
