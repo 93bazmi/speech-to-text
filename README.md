@@ -1,4 +1,4 @@
-# **Speech-to-Text Translator** 🎤 
+# **VoiceStream (Speech-to-Text Translator)** 🎤 
 
 This project was initially generated from a StackBlitz requirement and later extended with additional features and improvements.
 
